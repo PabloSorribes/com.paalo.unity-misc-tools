@@ -1,7 +1,7 @@
 {
     "name": "Paalo.UnityMiscTools.Editor",
     "references": [
-        "GUID:73fe78c423dee0a4ebb620ef4f6ec7cf"
+        "GUID:af5f529bd763acb4aac4efbd9933fdb1"
     ],
     "includePlatforms": [
         "Editor"
