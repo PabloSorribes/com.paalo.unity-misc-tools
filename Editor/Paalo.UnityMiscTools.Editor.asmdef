@@ -1,0 +1,17 @@
+{
+    "name": "Paalo.UnityMiscTools.Editor",
+    "references": [
+        "GUID:73fe78c423dee0a4ebb620ef4f6ec7cf"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
