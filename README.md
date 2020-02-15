@@ -1,4 +1,4 @@
-# com.paalo.unity-misc-tools
+# Pablo's Unity Misc Tools
 Add this package to get more functionality for Unity's Editor.
 
 # Adding the package to your project
