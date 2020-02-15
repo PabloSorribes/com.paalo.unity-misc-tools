@@ -15,7 +15,7 @@ Add the package to your project by adding this in your `manifest.json`-file, loc
 # Stuff included:
 
 ## Bulk Rename Utility
-Rename, add prefix/suffix and enumerate the names of the GameObjects in your Hierarchy!
+Rename, find and replace, add prefix/suffix and enumerate the names of the GameObjects in your Hierarchy!
 
 ![Bulk Rename Utility 3 0](https://user-images.githubusercontent.com/10932943/74588978-8da7df80-5001-11ea-8e53-37f7256ec635.gif)
 
