@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OutHere
+namespace Paalo
 {
 	public class #SCRIPTNAME# : MonoBehaviour 
 	{

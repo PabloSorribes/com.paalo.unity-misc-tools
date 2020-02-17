@@ -5,11 +5,11 @@
 using UnityEditor;
 using UnityEngine;
 
-public class CreateNewScriptClassFromCustomTemplate
+public class CreateNewScriptFromCustomTemplate
 {
-	private static string pathToYourScriptTemplate = "com.paalo.unity-misc-tools/Editor/Create Scripts from own Template/ScriptTemplates/OutHereScriptTemplate.cs.txt";
+	private static string pathToYourScriptTemplate = "com.paalo.unity-misc-tools/Editor/Create Scripts from own Template/ScriptTemplates/PaaloScriptTemplate.cs.txt";
 
-	[MenuItem(itemName: "Assets/Create/Create New Script from Custom Template", isValidateFunction: false, priority: 51)]
+	[MenuItem(itemName: "Assets/Create/Paalo/Create New Script from Custom Template", isValidateFunction: false, priority: 51)]
 	public static void CreateScriptFromTemplate()
 	{
 		int dialogResult = EditorUtility.DisplayDialogComplex(
@@ -32,7 +32,7 @@ public class CreateNewScriptClassFromCustomTemplate
 		{
 			// Default template (ok)
 			case 0:
-				ProjectWindowUtil.CreateScriptAssetFromTemplateFile(pathToYourScriptTemplate, "OutHereBehaviour.cs");
+				ProjectWindowUtil.CreateScriptAssetFromTemplateFile(pathToYourScriptTemplate, "PaaloBehaviour.cs");
 				break;
 
 			// Cancel.
@@ -47,7 +47,7 @@ public class CreateNewScriptClassFromCustomTemplate
 				{
 					break;
 				}
-				ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templateAlternative, "OutHereBehaviour.cs");
+				ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templateAlternative, "PaaloBehaviour.cs");
 				break;
 
 			default:
