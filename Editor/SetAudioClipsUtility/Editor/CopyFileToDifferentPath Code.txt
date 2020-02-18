@@ -1,0 +1,19 @@
+			string sourcePath = "";
+			string destinationPath = "";
+
+			if (GUILayout.Button($"Get Folders!"))
+			{
+				sourcePath = EditorUtility.OpenFolderPanel("Source Path", startPath, "");
+				Debug.Log(sourcePath);
+			}
+
+			if (GUILayout.Button($"Set Destination!"))
+			{
+				destinationPath = EditorUtility.OpenFolderPanel("New destination", startPath, "");
+				Debug.Log(destinationPath);
+			}
+
+			if (GUILayout.Button($"Copy to destination!"))
+			{
+				FileUtil.CopyFileOrDirectory(sourcePath, destinationPath);
+			}
