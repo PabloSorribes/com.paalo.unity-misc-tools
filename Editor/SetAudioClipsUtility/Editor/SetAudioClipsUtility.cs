@@ -1,4 +1,4 @@
-﻿//using Paalo.Utils;
+﻿using Paalo.Utils;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -8,17 +8,12 @@ namespace Paalo.Tools
 {
 	public class SetAudioClipsUtility : EditorWindow
 	{
+		#region ToolName and SetupWindow
 		private const int menuIndexPosition = PabloSorribesToolsConstants.defaultPaaloMenuIndexPosition;     //To make the menu be at the top of the GameObject-menu and the first option in the hierarchy.
 		private const string baseMenuPath = PabloSorribesToolsConstants.defaultPaaloMenuPath;
 		private const string rightClickMenuPath = "GameObject/" + baseMenuPath + toolName;
 		private const string toolsMenuPath = "Window/" + baseMenuPath + toolName;
 		private const string toolName = "Set AudioClips Utility";
-
-		public string startPath = "Assets/Game/Audio/Source";
-		public AudioClip[] audioClips = null;
-
-		public string textArea = "";
-		Vector2 textAreaScroller;
 
 		[MenuItem(rightClickMenuPath, false, menuIndexPosition)]
 		public static void RightClickMenu()
@@ -38,17 +33,47 @@ namespace Paalo.Tools
 			window.minSize = new Vector2(300, 200);
 			window.maxSize = new Vector2(window.minSize.x + 100, window.minSize.y + 100);
 		}
+		#endregion ToolName and SetupWindow
+
+		public string startPath = "Assets/Game/Audio/Source";
+		public AudioClip[] audioClips = null;
+
+		public string textArea = "";
+		Vector2 textAreaScroller;
 
 		private void OnGUI()
 		{
+			//GUISection_GetAudioClipsDragAndDrop();
+			//EditorGUILayout.Space();
 			GUISection_GetAudioClips();
 			EditorGUILayout.Space();
 			GUISection_SetAudioClips();
 		}
 
+		private void GUISection_GetAudioClipsDragAndDrop()
+		{
+			//EditorGUILayout.BeginVertical(GUI.skin.box);
+			PaaloEditorGUIHelper.DrawDragAndDropArea<AudioClip>(new PaaloEditorGUIHelper.DragAndDropAreaInfo("Audio Clips"), UpdateAudioClips);
+			//EditorGUILayout.EndVertical();
+		}
+
+		private void UpdateAudioClips<T>(T[] draggedObjects) where T : Object
+		{
+			audioClips = draggedObjects as AudioClip[];
+
+			Debug.Log("Dragged Object Array Length: " + audioClips.Length);
+			Debug.Log($"Dragged Obj Array Type: {draggedObjects.GetType().FullName}");
+			foreach (var draggedObj in draggedObjects)
+			{
+				Debug.Log($"Dragged Obj Type: {draggedObj.GetType().FullName}");
+			}
+		}
+
 		private void GUISection_GetAudioClips()
 		{
 			EditorGUILayout.BeginVertical(GUI.skin.box);
+
+			PaaloEditorGUIHelper.DrawDragAndDropArea<AudioClip>(new PaaloEditorGUIHelper.DragAndDropAreaInfo("Audio Clips"), UpdateAudioClips);
 
 			EditorGUILayout.Space();
 			startPath = EditorGUILayout.TextField("Starting Path: ", startPath);
