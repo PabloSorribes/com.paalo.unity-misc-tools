@@ -3,7 +3,7 @@
 	public class CurrentPackageConstants
 	{
 		private const string paaloMenuPath = "Paalo/";
-		private const string currentPackageName = "Unity Misc Tools" + "/";
+		private const string currentPackageName = "Misc Tools" + "/";
 
 		/// <summary>
 		/// To make the menu be at the top of the GameObject-menu and the first option in the hierarchy.
