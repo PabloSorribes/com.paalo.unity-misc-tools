@@ -1,6 +1,6 @@
 ﻿using Paalo.Utils;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,18 +46,13 @@ namespace Paalo.Tools
 			GUISection_GetAudioClips();
 			EditorGUILayout.Space();
 			GUISection_SetAudioClips();
+			EditorGUILayout.Space();
+			GUISection_ShowSelectedAudioClipsTextArea();
 		}
 
-		private void UpdateAudioClips<T>(T[] draggedObjects) where T : Object
+		private void UpdateAudioClips<T>(T[] draggedObjects) where T : UnityEngine.Object
 		{
 			audioClips = draggedObjects as AudioClip[];
-
-			Debug.Log("Dragged Object Array Length: " + audioClips.Length);
-			Debug.Log($"Dragged Obj Array Type: {draggedObjects.GetType().FullName}");
-			foreach (var draggedObj in draggedObjects)
-			{
-				Debug.Log($"Dragged Obj Type: {draggedObj.GetType().FullName}");
-			}
 		}
 
 		private void GUISection_GetAudioClips()
@@ -76,11 +71,7 @@ namespace Paalo.Tools
 				//audioClips = null;
 				audioClips = new AudioClip[0];
 			}
-			GUI.color = oldGuiColor;
-
 			EditorGUILayout.Space();
-
-			GUISection_ShowSelectedAudioClipsTextArea();
 
 			GUI.color = oldGuiColor;
 			EditorGUILayout.EndVertical();
@@ -88,65 +79,85 @@ namespace Paalo.Tools
 
 		private void GUISection_ShowSelectedAudioClipsTextArea()
 		{
-			string selectedClipName = "";
+			EditorGUILayout.BeginVertical(GUI.skin.box);
+
+			//Label for amount of Audio Clips
+			EditorGUILayout.LabelField($"Selected Audio Clips: {audioClips?.Length}", EditorStyles.boldLabel);
+
+			//Making a long string with a newline between each element.
+			string selectedClipNamesString = "";
 			if (audioClips != null)
 			{
 				foreach (var clip in audioClips)
 				{
-					selectedClipName += $"{clip.name}\n";
+					selectedClipNamesString += $"{clip.name}\n";
 				}
+				selectedClipNamesString.TrimEnd(System.Environment.NewLine.ToCharArray());
 			}
 
-			//Make text area showing what clips have been selected already
-			EditorGUILayout.LabelField($"{audioClips?.Length} Selected Audio Clips:", EditorStyles.boldLabel);
-
+			//Just show TextArea if any audio clips have been selected.
 			if (audioClips != null && audioClips.Length > 0)
 			{
+				//Make text area showing what clips have been selected already.
+				//Calculate the size of the text area by adding one lineHeight per element 
 				textAreaScroller = EditorGUILayout.BeginScrollView(textAreaScroller);
-				textArea = EditorGUILayout.TextArea(selectedClipName, GUILayout.Height(position.height - 150));
+				float textAreaSingleLineHeight = EditorGUIUtility.singleLineHeight - 1f;
+				float textAreaHeight = textAreaSingleLineHeight * audioClips.Length;
+				textArea = EditorGUILayout.TextArea(selectedClipNamesString, GUILayout.Height(textAreaHeight));
 				EditorGUILayout.EndScrollView();
 			}
+
+			EditorGUILayout.EndVertical();
 		}
 
 		private void GUISection_SetAudioClips()
 		{
+			bool oldGUIEnabled = GUI.enabled;
+			Color oldGuiColor = GUI.color;
+			var selectedObjects = Selection.gameObjects;
+
 			//Disable button if no clips are selected.
 			GUI.enabled = audioClips.Length > 0 ? true : false;
 
-			Color oldGuiColor = GUI.color;
-
-			var selectedObjects = Selection.gameObjects;
+			//Draw Button
 			EditorGUILayout.BeginVertical(GUI.skin.box);
-
 			GUI.color = Color.cyan;
-			if (GUILayout.Button($"Apply AudioClips to {selectedObjects.Length} selected GameObjects!"))
+			if (GUILayout.Button($"Apply {audioClips.Length} AudioClips to {selectedObjects.Length} selected GameObjects!"))
 			{
 				SetAudioClips(audioClips, selectedObjects);
 			}
 			EditorGUILayout.EndVertical();
 
 			GUI.color = oldGuiColor;
+			GUI.enabled = oldGUIEnabled;
 		}
 
 		private static void SetAudioClips(AudioClip[] audioClips, GameObject[] gameObjects)
 		{
+			//Sort the selection in the hierarchy order, top to bottom.
 			List<GameObject> gameObjectsList = new List<GameObject>(gameObjects);
 			gameObjectsList.Sort(new SceneGraphOrderComparer());
-			
+
+			//Find the gameObjects which have an AudioSource on them.
+			IEnumerable<GameObject> gameObjectsWithAudioSources = gameObjectsList.Where(go => go.GetComponent<AudioSource>() != null);
+			gameObjectsList = gameObjectsWithAudioSources.ToList();
+
+			//Loop through the gameObjects with AudioSources and apply clips to them.
+			//Also loop back and continue from the first clip if there are more AudioSources selected than AudioClips available.
 			for (int i = 0; i < gameObjectsList.ToArray().Length; i++)
 			{
-				int clipsIndex = i;
+				var currentObject = gameObjectsList[i];
+				Undo.RecordObject(currentObject, $"Set AudioClip to {currentObject.name}");
 
+				int clipsIndex = i;
 				if (i > audioClips.Length - 1)
 				{
 					clipsIndex -= audioClips.Length;
 					Debug.Log("You have less AudioClips than selected GameObjects - Starting the audio clip iteration again.");
 				}
 
-				var currentObject = gameObjectsList[i];
-				Undo.RecordObject(currentObject, $"Set AudioClip '{audioClips[clipsIndex]}' to {currentObject.name}");
-
-				currentObject.GetComponent<AudioSource>().clip = audioClips[clipsIndex];
+				AudioSource audioSource = currentObject.GetComponent<AudioSource>();
+				audioSource.clip = audioClips[clipsIndex];
 			}
 
 			Debug.Log($"Applied AudioClips to {gameObjectsList.ToArray().Length} GameObjects with AudioSources.");
