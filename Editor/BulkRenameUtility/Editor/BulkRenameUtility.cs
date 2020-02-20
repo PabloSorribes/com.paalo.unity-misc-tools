@@ -7,30 +7,16 @@ namespace Paalo.Tools
 {
 	public class BulkRenameUtility : EditorWindow
 	{
-		private const int menuIndexPosition = CurrentPackageConstants.paaloMenuIndexPosition;     //To make the menu be at the top of the GameObject-menu and the first option in the hierarchy.
-		private const string baseMenuPath = CurrentPackageConstants.paaloMenuPath;
-		private const string rightClickMenuPath = "GameObject/"+ baseMenuPath + toolName;
-		private const string toolsMenuPath = "Window/" + baseMenuPath + toolName;
+		#region ToolName and SetupWindow
 		private const string toolName = "Bulk Rename Utility";
 
-		public string addString = "";
-		public bool addStringAsPrefix = false;
-
-		public string stringToRemove = "";
-		public string replacementString = "";
-
-		public string setNewNameString = "";
-
-		public bool addNumberAsPrefix = false;
-		public bool topToBottom = true;
-
-		[MenuItem(rightClickMenuPath, false, menuIndexPosition)]
+		[MenuItem(CurrentPackageConstants.packageRightClickMenuPath + toolName, false, CurrentPackageConstants.packageMenuIndexPosition)]
 		public static void RightClickMenu()
 		{
 			SetupWindow();
 		}
 
-		[MenuItem(toolsMenuPath, false, menuIndexPosition)]
+		[MenuItem(CurrentPackageConstants.packageWindowMenuPath + toolName, false, CurrentPackageConstants.packageMenuIndexPosition)]
 		public static void ToolsMenu()
 		{
 			SetupWindow();
@@ -42,6 +28,18 @@ namespace Paalo.Tools
 			window.minSize = new Vector2(350, 375);
 			window.maxSize = new Vector2(window.minSize.x, window.minSize.y);
 		}
+		#endregion ToolName and SetupWindow
+
+		public string addString = "";
+		public bool addStringAsPrefix = false;
+
+		public string stringToRemove = "";
+		public string replacementString = "";
+
+		public string setNewNameString = "";
+
+		public bool addNumberAsPrefix = false;
+		public bool topToBottom = true;
 
 		private void OnGUI()
 		{
