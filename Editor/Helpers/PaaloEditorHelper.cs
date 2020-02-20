@@ -235,39 +235,32 @@ namespace Paalo.Utils
 		{
 			List<T> draggedTypeObjects = new List<T>();
 
-			foreach (var dragged in DragAndDrop.objectReferences)
+			foreach (var draggedObject in DragAndDrop.objectReferences)
 			{
-				T draggedAsset = null;
-
 				//A "DefaultAsset" is a folder in the Unity Editor.
-				if (dragged is DefaultAsset)
+				if (draggedObject is DefaultAsset)
 				{
-					string folderPath = AssetDatabase.GetAssetPath(dragged);
+					string folderPath = AssetDatabase.GetAssetPath(draggedObject);
 					var assetsInDraggedFolders = GetAllAssetsOfTypeInDirectory<T>(folderPath);
 					foreach (var asset in assetsInDraggedFolders)
 					{
+						if (draggedTypeObjects.Contains(asset as T))
+						{
+							//Debug.Log($"Asset in Dragged Folder exists already: '{asset.name}'");
+							continue;
+						}
+
 						draggedTypeObjects.Add(asset as T);
 					}
-
-
-					//var assetPaths = AssetDatabase.FindAssets("t:AudioClip", DragAndDrop.paths);
-					//foreach (var assetPath in assetPaths)
-					//{
-					//	draggedAsset = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(assetPath));
-					//	if (draggedAsset == null)
-					//	{
-					//		continue;
-					//	}
-
-					//	Debug.Log($"Default Asset Dragged: {draggedAsset.name}");
-					//	draggedTypeObjects.Add(draggedAsset as T);
-					//}
+					//Go to next index in the "DragAndDrop.objectReferences"
 					continue;
 				}
 
-				draggedAsset = dragged as T;
-				if (draggedAsset == null)
+				//Dragged asset is a "normal" asset, ie. not a Folder.
+				T draggedAsset = draggedObject as T;
+				if (draggedAsset == null || draggedTypeObjects.Contains(draggedAsset as T))
 				{
+					//Debug.Log($"Dragged Asset is not casteable to the type you wanted or already exists in the selection list: '{draggedAsset.name}'");
 					continue;
 				}
 
