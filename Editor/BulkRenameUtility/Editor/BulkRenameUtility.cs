@@ -39,7 +39,7 @@ namespace Paalo.Tools
 		public static void SetupWindow()
 		{
 			var window = GetWindow<BulkRenameUtility>(true, toolName, true);
-			window.minSize = new Vector2(350, 350);
+			window.minSize = new Vector2(350, 375);
 			window.maxSize = new Vector2(window.minSize.x, window.minSize.y);
 		}
 
