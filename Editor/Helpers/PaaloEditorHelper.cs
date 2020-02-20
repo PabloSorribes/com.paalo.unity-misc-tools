@@ -168,7 +168,7 @@ namespace Paalo.Utils
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="draggedObjects"></param>
-		private static void OnDragAndDropPerformed_CallbackExample<T>(T[] draggedObjects) where T : Object
+		private static void OnDragAndDropPerformed_CallbackExample<T>(T[] draggedObjects) where T : UnityEngine.Object
 		{
 			var myObjects = draggedObjects as AudioClip[];
 
@@ -231,7 +231,7 @@ namespace Paalo.Utils
 			GUI.color = originalGUIColor;
 		}
 
-		private static T[] GetDraggedObjects<T>() where T : Object
+		private static T[] GetDraggedObjects<T>() where T : UnityEngine.Object
 		{
 			List<T> draggedTypeObjects = new List<T>();
 
