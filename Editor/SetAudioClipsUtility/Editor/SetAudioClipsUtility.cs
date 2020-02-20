@@ -36,25 +36,16 @@ namespace Paalo.Tools
 		#endregion ToolName and SetupWindow
 
 		public string startPath = "Assets/Game/Audio/Source";
-		public AudioClip[] audioClips = null;
+		public AudioClip[] audioClips = new AudioClip[0];
 
 		public string textArea = "";
 		Vector2 textAreaScroller;
 
 		private void OnGUI()
 		{
-			//GUISection_GetAudioClipsDragAndDrop();
-			//EditorGUILayout.Space();
 			GUISection_GetAudioClips();
 			EditorGUILayout.Space();
 			GUISection_SetAudioClips();
-		}
-
-		private void GUISection_GetAudioClipsDragAndDrop()
-		{
-			//EditorGUILayout.BeginVertical(GUI.skin.box);
-			PaaloEditorGUIHelper.DrawDragAndDropArea<AudioClip>(new PaaloEditorGUIHelper.DragAndDropAreaInfo("Audio Clips"), UpdateAudioClips);
-			//EditorGUILayout.EndVertical();
 		}
 
 		private void UpdateAudioClips<T>(T[] draggedObjects) where T : Object
@@ -71,122 +62,70 @@ namespace Paalo.Tools
 
 		private void GUISection_GetAudioClips()
 		{
+			Color oldGuiColor = GUI.color;
 			EditorGUILayout.BeginVertical(GUI.skin.box);
 
-			PaaloEditorGUIHelper.DrawDragAndDropArea<AudioClip>(new PaaloEditorGUIHelper.DragAndDropAreaInfo("Audio Clips"), UpdateAudioClips);
-
 			EditorGUILayout.Space();
-			startPath = EditorGUILayout.TextField("Starting Path: ", startPath);
-			EditorGUILayout.Space();
-
-			Color oldGuiColor = GUI.color;
-
-			GUI.color = Color.cyan;
-			if (GUILayout.Button($"Gimme them Audio Clips!"))
-			{
-				string directoryToBrowse = BrowseToFolder(startPath);
-				if (string.IsNullOrEmpty(directoryToBrowse))
-				{
-					return;
-				}
-
-				audioClips = GetAllAssetsOfTypeInDirectory<AudioClip>(directoryToBrowse);
-			}
-
+			var dragAndDropInfo = new PaaloEditorHelper.DragAndDropAreaInfo("Audio Clips", Color.black, Color.cyan);
+			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(dragAndDropInfo, UpdateAudioClips);
 			EditorGUILayout.Space();
 
 			GUI.color = Color.red;
 			if (GUILayout.Button("Clear selected AudioClips"))
 			{
-				audioClips = null;
+				//audioClips = null;
+				audioClips = new AudioClip[0];
 			}
 			GUI.color = oldGuiColor;
 
 			EditorGUILayout.Space();
 
-			GUISection_SelectedAudioClipsTextArea();
+			GUISection_ShowSelectedAudioClipsTextArea();
 
 			GUI.color = oldGuiColor;
 			EditorGUILayout.EndVertical();
 		}
 
-		private void GUISection_SelectedAudioClipsTextArea()
+		private void GUISection_ShowSelectedAudioClipsTextArea()
 		{
-			string selectedClips = "";
+			string selectedClipName = "";
 			if (audioClips != null)
 			{
 				foreach (var clip in audioClips)
 				{
-					selectedClips += $"{clip.name}\n";
+					selectedClipName += $"{clip.name}\n";
 				}
 			}
 
 			//Make text area showing what clips have been selected already
-			EditorGUILayout.LabelField("Selected Audio Clips:", EditorStyles.boldLabel);
-			textAreaScroller = EditorGUILayout.BeginScrollView(textAreaScroller);
-			textArea = EditorGUILayout.TextArea(selectedClips, GUILayout.Height(position.height - 150));
-			EditorGUILayout.EndScrollView();
+			EditorGUILayout.LabelField($"{audioClips?.Length} Selected Audio Clips:", EditorStyles.boldLabel);
+
+			if (audioClips != null && audioClips.Length > 0)
+			{
+				textAreaScroller = EditorGUILayout.BeginScrollView(textAreaScroller);
+				textArea = EditorGUILayout.TextArea(selectedClipName, GUILayout.Height(position.height - 150));
+				EditorGUILayout.EndScrollView();
+			}
 		}
 
 		private void GUISection_SetAudioClips()
 		{
+			//Disable button if no clips are selected.
+			GUI.enabled = audioClips.Length > 0 ? true : false;
+
 			Color oldGuiColor = GUI.color;
 
 			var selectedObjects = Selection.gameObjects;
 			EditorGUILayout.BeginVertical(GUI.skin.box);
 
 			GUI.color = Color.cyan;
-			if (GUILayout.Button($"Set AudioClips to {selectedObjects.Length} selected GameObjects!"))
+			if (GUILayout.Button($"Apply AudioClips to {selectedObjects.Length} selected GameObjects!"))
 			{
 				SetAudioClips(audioClips, selectedObjects);
 			}
 			EditorGUILayout.EndVertical();
 
 			GUI.color = oldGuiColor;
-		}
-
-		private static string BrowseToFolder(string startPath = "Assets")
-		{
-			string folderPath = EditorUtility.OpenFolderPanel("Browse to Folder", startPath, "");
-			if (string.IsNullOrEmpty(folderPath))
-			{
-				//Cancelled the OpenFolderPanel window.
-				return string.Empty;
-			}
-
-			if (folderPath.Contains(Application.dataPath))
-			{
-				folderPath = folderPath.Replace(Application.dataPath, string.Empty).Trim();
-				folderPath = folderPath.TrimStart('/', '\\');
-				folderPath = $"Assets/{folderPath}";
-			}
-			return folderPath;
-		}
-
-		public static T[] GetAllAssetsOfTypeInDirectory<T>(string path) where T : UnityEngine.Object
-		{
-			List<T> assetsToGet = new List<T>();
-
-			string absolutePath = Application.dataPath + "/" + path.Remove(0, 7);
-			string[] fileEntries = Directory.GetFiles(absolutePath);
-
-			foreach (string fileName in fileEntries)
-			{
-				string sanitizedFileName = fileName.Replace('\\', '/');
-				int index = sanitizedFileName.LastIndexOf('/');
-				string localPath = path;
-				if (index > 0)
-				{
-					localPath += sanitizedFileName.Substring(index);
-				}
-				//Paalo.Utils.EditorGUIHelper.DisplayProgressBar("Image Sequencer", "Discovering Assets in folder...", (float)i / count);
-
-				T assetOfType = AssetDatabase.LoadAssetAtPath<T>(localPath);
-				if (assetOfType != null)
-					assetsToGet.Add(assetOfType);
-			}
-			//Paalo.Utils.EditorGUIHelper.ClearProgressBar();
-			return assetsToGet.ToArray();
 		}
 
 		private static void SetAudioClips(AudioClip[] audioClips, GameObject[] gameObjects)
@@ -196,19 +135,43 @@ namespace Paalo.Tools
 			
 			for (int i = 0; i < gameObjectsList.ToArray().Length; i++)
 			{
+				int clipsIndex = i;
+
 				if (i > audioClips.Length - 1)
 				{
-					Debug.Log("You have less AudioClips than selected GameObjects.");
-					return;
+					clipsIndex -= audioClips.Length;
+					Debug.Log("You have less AudioClips than selected GameObjects - Starting the audio clip iteration again.");
 				}
 
 				var currentObject = gameObjectsList[i];
-				Undo.RecordObject(currentObject, $"Set AudioClip '{audioClips[i]}' to {currentObject.name}");
+				Undo.RecordObject(currentObject, $"Set AudioClip '{audioClips[clipsIndex]}' to {currentObject.name}");
 
-				currentObject.GetComponent<AudioSource>().clip = audioClips[i];
+				currentObject.GetComponent<AudioSource>().clip = audioClips[clipsIndex];
 			}
 
-			Debug.Log($"Set the AudioClips for {audioClips.Length} GameObjects");
+			Debug.Log($"Applied AudioClips to {gameObjectsList.ToArray().Length} GameObjects with AudioSources.");
+		}
+
+
+
+
+		private void GUISection_OldGetClipsButton()
+		{
+			EditorGUILayout.Space();
+			startPath = EditorGUILayout.TextField("Starting Path: ", startPath);
+			EditorGUILayout.Space();
+
+			GUI.color = Color.cyan;
+			if (GUILayout.Button($"Gimme them Audio Clips!"))
+			{
+				string directoryToBrowse = PaaloEditorHelper.BrowseToFolder(startPath);
+				if (string.IsNullOrEmpty(directoryToBrowse))
+				{
+					return;
+				}
+
+				audioClips = PaaloEditorHelper.GetAllAssetsOfTypeInDirectory<AudioClip>(directoryToBrowse);
+			}
 		}
 	}
 }

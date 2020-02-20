@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Paalo.Utils
 	/// <summary>
 	/// Contains helper methods for common (and tedious) operations when writing IMGUI-code.
 	/// </summary>
-	public static class PaaloEditorGUIHelper
+	public static class PaaloEditorHelper
 	{
 		private static readonly float originalLabelWidth = EditorGUIUtility.labelWidth;
 		private static readonly int originalIndentation = EditorGUI.indentLevel;
@@ -159,7 +160,7 @@ namespace Paalo.Utils
 		/// </summary>
 		private static void HowToDrawDragAndDropArea()
 		{
-			PaaloEditorGUIHelper.DrawDragAndDropArea<AnimationClip>(new DragAndDropAreaInfo("Audio Clips"), OnDragAndDropPerformed_CallbackExample);
+			PaaloEditorHelper.DrawDragAndDropArea<AnimationClip>(new DragAndDropAreaInfo("Audio Clips"), OnDragAndDropPerformed_CallbackExample);
 		}
 
 		/// <summary>
@@ -241,22 +242,26 @@ namespace Paalo.Utils
 				//A "DefaultAsset" is a folder in the Unity Editor.
 				if (dragged is DefaultAsset)
 				{
-					//TODO: Allow for different types / match 'T' against a Dictionary with the allowed filters (see FindDirectoryOfScript.cs for more info on filters)
-					//OR: Load the assets from the dragged folder, but only get the ones of the correct type using 'draggedAsset.GetType().FullName'
-					//draggedAsset.GetType().FullName
-
-					var assetPaths = AssetDatabase.FindAssets("t:AudioClip", DragAndDrop.paths);
-					foreach (var assetPath in assetPaths)
+					string folderPath = AssetDatabase.GetAssetPath(dragged);
+					var assetsInDraggedFolders = GetAllAssetsOfTypeInDirectory<T>(folderPath);
+					foreach (var asset in assetsInDraggedFolders)
 					{
-						draggedAsset = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(assetPath));
-						if (draggedAsset == null)
-						{
-							continue;
-						}
-
-						Debug.Log($"Default Asset Dragged: {draggedAsset.name}");
-						draggedTypeObjects.Add(draggedAsset as T);
+						draggedTypeObjects.Add(asset as T);
 					}
+
+
+					//var assetPaths = AssetDatabase.FindAssets("t:AudioClip", DragAndDrop.paths);
+					//foreach (var assetPath in assetPaths)
+					//{
+					//	draggedAsset = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(assetPath));
+					//	if (draggedAsset == null)
+					//	{
+					//		continue;
+					//	}
+
+					//	Debug.Log($"Default Asset Dragged: {draggedAsset.name}");
+					//	draggedTypeObjects.Add(draggedAsset as T);
+					//}
 					continue;
 				}
 
@@ -305,5 +310,47 @@ namespace Paalo.Utils
 			}
 		}
 		#endregion
+
+		public static T[] GetAllAssetsOfTypeInDirectory<T>(string path) where T : UnityEngine.Object
+		{
+			List<T> assetsToGet = new List<T>();
+
+			string absolutePath = $"{Application.dataPath}/{path.Remove(0, 7)}";
+			string[] fileEntries = Directory.GetFiles(absolutePath);
+
+			foreach (string fileName in fileEntries)
+			{
+				string sanitizedFileName = fileName.Replace('\\', '/');
+				int index = sanitizedFileName.LastIndexOf('/');
+				string localPath = path;
+				if (index > 0)
+				{
+					localPath += sanitizedFileName.Substring(index);
+				}
+
+				T assetOfType = AssetDatabase.LoadAssetAtPath<T>(localPath);
+				if (assetOfType != null)
+					assetsToGet.Add(assetOfType);
+			}
+			return assetsToGet.ToArray();
+		}
+
+		public static string BrowseToFolder(string startPath = "Assets")
+		{
+			string folderPath = EditorUtility.OpenFolderPanel("Browse to Folder", startPath, "");
+			if (string.IsNullOrEmpty(folderPath))
+			{
+				//Cancelled the OpenFolderPanel window.
+				return string.Empty;
+			}
+
+			if (folderPath.Contains(Application.dataPath))
+			{
+				folderPath = folderPath.Replace(Application.dataPath, string.Empty).Trim();
+				folderPath = folderPath.TrimStart('/', '\\');
+				folderPath = $"Assets/{folderPath}";
+			}
+			return folderPath;
+		}
 	}
 }
