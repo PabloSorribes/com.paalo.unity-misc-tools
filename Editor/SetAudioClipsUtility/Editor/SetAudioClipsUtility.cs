@@ -9,8 +9,8 @@ namespace Paalo.Tools
 	public class SetAudioClipsUtility : EditorWindow
 	{
 		#region ToolName and SetupWindow
-		private const int menuIndexPosition = PabloSorribesToolsConstants.defaultPaaloMenuIndexPosition;     //To make the menu be at the top of the GameObject-menu and the first option in the hierarchy.
-		private const string baseMenuPath = PabloSorribesToolsConstants.defaultPaaloMenuPath;
+		private const int menuIndexPosition = CurrentPackageConstants.paaloMenuIndexPosition;     //To make the menu be at the top of the GameObject-menu and the first option in the hierarchy.
+		private const string baseMenuPath = CurrentPackageConstants.paaloMenuPath;
 		private const string rightClickMenuPath = "GameObject/" + baseMenuPath + toolName;
 		private const string toolsMenuPath = "Window/" + baseMenuPath + toolName;
 		private const string toolName = "Set AudioClips Utility";
