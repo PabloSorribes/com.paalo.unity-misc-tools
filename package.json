@@ -1,7 +1,7 @@
 {
     "name": "com.paalo.unity-misc-tools",
     "displayName": "Pablo's Misc Unity Tools",
-    "version": "0.1.0",
+    "version": "0.2.1",
     "unity": "2019.3",
 	"author": "Pablo Sorribes Bernhard",
     "description": "Add this package to get more functionality for Unity's Editor.",
