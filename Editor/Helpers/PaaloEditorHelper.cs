@@ -187,6 +187,7 @@ namespace Paalo.Utils
 		/// <para></para>
 		/// Example implementation in OnGUI: <see cref="OnDragAndDropPerformed_CallbackExample{T}(T[])"/>
 		/// </summary>
+		/// <seealso cref="HowToDrawDragAndDropArea"/>
 		/// <typeparam name="T">The object type you want the '<paramref name="OnPerformedDragCallback"/>'-method to handle.</typeparam>
 		/// <param name="dragAreaInfo"></param>
 		/// <returns></returns>
@@ -328,6 +329,11 @@ namespace Paalo.Utils
 			return assetsToGet.ToArray();
 		}
 
+		/// <summary>
+		/// Open a folder panel which let's you browse to any folder on disk.
+		/// </summary>
+		/// <param name="startPath"></param>
+		/// <returns>The path to the folder that the user selected</returns>
 		public static string BrowseToFolder(string startPath = "Assets")
 		{
 			string folderPath = EditorUtility.OpenFolderPanel("Browse to Folder", startPath, "");

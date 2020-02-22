@@ -46,7 +46,7 @@ namespace Paalo.Tools
 			GUISection_ShowSelectedAudioClipsTextArea();
 		}
 
-		private void UpdateAudioClips<T>(T[] draggedObjects) where T : UnityEngine.Object
+		private void UpdateAudioClipsOnDragAndDrop<T>(T[] draggedObjects) where T : UnityEngine.Object
 		{
 			audioClips = draggedObjects as AudioClip[];
 		}
@@ -58,7 +58,7 @@ namespace Paalo.Tools
 
 			EditorGUILayout.Space();
 			var dragAndDropInfo = new PaaloEditorHelper.DragAndDropAreaInfo("Audio Clips", Color.black, Color.cyan);
-			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(dragAndDropInfo, UpdateAudioClips);
+			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(dragAndDropInfo, UpdateAudioClipsOnDragAndDrop);
 			EditorGUILayout.Space();
 
 			GUI.color = Color.red;
@@ -142,18 +142,13 @@ namespace Paalo.Tools
 			//Also loop back and continue from the first clip if there are more AudioSources selected than AudioClips available.
 			for (int i = 0; i < gameObjectsList.ToArray().Length; i++)
 			{
-				var currentObject = gameObjectsList[i];
-				Undo.RecordObject(currentObject, $"Set AudioClip to {currentObject.name}");
+				AudioSource audioSource = gameObjectsList[i].GetComponent<AudioSource>();
+				Undo.RecordObject(audioSource, $"Set AudioClip to {audioSource.name}");
 
-				int clipsIndex = i;
-				if (i > audioClips.Length - 1)
-				{
-					clipsIndex -= audioClips.Length;
-					Debug.Log("You have less AudioClips than selected GameObjects - Starting the audio clip iteration again.");
-				}
-
-				AudioSource audioSource = currentObject.GetComponent<AudioSource>();
-				audioSource.clip = audioClips[clipsIndex];
+				// When you have less AudioClips than selected GameObjects, this will start the AudioClip-iteration again.
+				// Source: https://stackoverflow.com/a/27624122/11027794
+				int clipIndexWithinAudioArrayRange = i % audioClips.Length;
+				audioSource.clip = audioClips[clipIndexWithinAudioArrayRange];
 			}
 
 			Debug.Log($"Applied AudioClips to {gameObjectsList.ToArray().Length} GameObjects with AudioSources.");
@@ -164,6 +159,7 @@ namespace Paalo.Tools
 
 		private void GUISection_OldGetClipsButton()
 		{
+			Color oldGuiColor = GUI.color;
 			EditorGUILayout.Space();
 			startPath = EditorGUILayout.TextField("Starting Path: ", startPath);
 			EditorGUILayout.Space();
@@ -179,6 +175,7 @@ namespace Paalo.Tools
 
 				audioClips = PaaloEditorHelper.GetAllAssetsOfTypeInDirectory<AudioClip>(directoryToBrowse);
 			}
+			GUI.color = oldGuiColor;
 		}
 	}
 }
