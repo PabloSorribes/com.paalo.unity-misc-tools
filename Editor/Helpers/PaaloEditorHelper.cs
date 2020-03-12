@@ -351,5 +351,25 @@ namespace Paalo.Utils
 			}
 			return folderPath;
 		}
+
+		/// <summary>
+		/// Returns the assets that are selected in the Project Tab.
+		/// </summary>
+		/// <returns></returns>
+		public static Object[] GetSelectedAssetsInProjectView()
+		{
+			Object[] selectedAssets = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets);
+			return selectedAssets;
+		}
+
+		/// <summary>
+		/// Returns a filtered selection of the selected assets which have the type '<typeparamref name="T"/>' on them (eg. a prefab, but not an actual script asset).
+		/// </summary>
+		/// <returns></returns>
+		public static Object[] GetSelectedAssetsInProjectView<T>() where T : UnityEngine.Object
+		{
+			Object[] selectedAssets = Selection.GetFiltered(typeof(T), SelectionMode.Assets);
+			return selectedAssets;
+		}
 	}
 }
