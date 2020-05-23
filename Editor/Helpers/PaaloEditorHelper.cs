@@ -14,6 +14,81 @@ namespace Paalo.Utils
 		private static readonly int originalIndentation = EditorGUI.indentLevel;
 
 		/// <summary>
+		/// Button which is disabled (greyed out) depending on the bool which is sent in.
+		/// <para></para>
+		/// Only handles 
+		/// </summary>
+		/// <param name="buttonText">The text displayed in the button.</param>
+		/// <param name="onClickCallback">What action/method to perform when the button is clicked</param>
+		/// <param name="buttonColor">Optional color your button should have</param>
+		/// <param name="isActive">Enable/Disable the button depending on conditions you define</param>
+		/// <param name="addVerticalBox">Add a box around the button for prettyfication</param>
+		public static void ButtonDisableable(string buttonText, System.Action onClickCallback, bool isActive = true, Color? buttonColor = null, bool addVerticalBox = true)
+		{
+			//Make it possible to make the button greyed out and "inactive".
+			bool oldGuiEnabled = GUI.enabled;
+			GUI.enabled = isActive;
+
+			//Set color and check if it is null
+			var oldGuiColor = GUI.color;
+			GUI.color = buttonColor.GetValueOrDefault(oldGuiColor);
+
+			//Create box for prettyfication
+			if (addVerticalBox)
+				EditorGUILayout.BeginVertical(GUI.skin.box);
+
+			//Perform action if clicked
+			if (GUILayout.Button(buttonText))
+			{
+				onClickCallback?.Invoke();
+			}
+
+			//End prettyfication-box
+			if (addVerticalBox)
+				EditorGUILayout.EndVertical();
+
+			//Reset GUI to old values
+			GUI.color = oldGuiColor;
+			GUI.enabled = oldGuiEnabled;
+		}
+
+		/// <summary>
+		/// Button which can be hidden depending on bool sent in.
+		/// </summary>
+		/// <param name="buttonText"></param>
+		/// <param name="onClick"></param>
+		/// <param name="buttonColor"></param>
+		/// <param name="isVisible"></param>
+		public static void ButtonHideable(string buttonText, System.Action onClick, bool isVisible = true, Color? buttonColor = null, bool addVerticalBox = true)
+		{
+			if (!isVisible)
+			{
+				return;
+			}
+
+			//Set color
+			var oldGuiColor = GUI.color;
+			GUI.color = buttonColor.GetValueOrDefault(oldGuiColor);
+
+			//Create box for prettyfication
+			if (addVerticalBox)
+				EditorGUILayout.BeginVertical(GUI.skin.box);
+
+			//Perform action if clicked
+			if (GUILayout.Button(buttonText))
+			{
+				onClick?.Invoke();
+			}
+
+			//End prettyfication-box
+			if (addVerticalBox)
+				EditorGUILayout.EndVertical();
+
+			//Reset GUI to old values
+			GUI.color = oldGuiColor;
+		}
+
+		/// <summary>
 		/// A GUIStyle made of a box which is shaped like line.
 		/// </summary>
 		/// <returns></returns>
