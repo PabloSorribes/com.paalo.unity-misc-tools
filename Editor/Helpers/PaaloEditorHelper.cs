@@ -160,7 +160,7 @@ namespace Paalo.Utils
 		/// </summary>
 		private static void HowToDrawDragAndDropArea()
 		{
-			PaaloEditorHelper.DrawDragAndDropArea<AnimationClip>(new DragAndDropAreaInfo("Audio Clips"), OnDragAndDropPerformed_CallbackExample);
+			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(new DragAndDropAreaInfo("Audio Clips"), OnDragAndDropPerformed_CallbackExample);
 		}
 
 		/// <summary>
