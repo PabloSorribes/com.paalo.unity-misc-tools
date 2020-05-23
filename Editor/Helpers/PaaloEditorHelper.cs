@@ -96,61 +96,61 @@ namespace Paalo.Utils
 		}
 
 
-        #region ProgressBar Handling
-        //Source: https://github.com/Unity-Technologies/VFXToolbox/blob/master/Editor/Utility/VFXToolboxGUIUtility.cs
+		#region ProgressBar Handling
+		//Source: https://github.com/Unity-Technologies/VFXToolbox/blob/master/Editor/Utility/VFXToolboxGUIUtility.cs
 
-        private static double s_LastProgressBarTime;
+		private static double s_LastProgressBarTime;
 
-        /// <summary>
-        /// Displays a progress bar with delay and optional cancel button
-        /// </summary>
-        /// <param name="title">title of the window</param>
-        /// <param name="message">message</param>
-        /// <param name="progress">progress</param>
-        /// <param name="delay">minimum delay before displaying window</param>
-        /// <param name="cancelable">is the window cancellable?</param>
-        /// <returns>true if cancelled, false otherwise</returns>
-        public static bool DisplayProgressBar(string title, string message, float progress, float delay = 0.0f, bool cancelable = false)
-        {
-            if (s_LastProgressBarTime < 0.0)
-                s_LastProgressBarTime = EditorApplication.timeSinceStartup;
+		/// <summary>
+		/// Displays a progress bar with delay and optional cancel button
+		/// </summary>
+		/// <param name="title">title of the window</param>
+		/// <param name="message">message</param>
+		/// <param name="progress">progress</param>
+		/// <param name="delay">minimum delay before displaying window</param>
+		/// <param name="cancelable">is the window cancellable?</param>
+		/// <returns>true if cancelled, false otherwise</returns>
+		public static bool DisplayProgressBar(string title, string message, float progress, float delay = 0.0f, bool cancelable = false)
+		{
+			if (s_LastProgressBarTime < 0.0)
+				s_LastProgressBarTime = EditorApplication.timeSinceStartup;
 
-            if (EditorApplication.timeSinceStartup - s_LastProgressBarTime > delay)
-            {
-                if (cancelable)
-                {
-                    return EditorUtility.DisplayCancelableProgressBar(title, message, progress);
-                }
-                else
-                {
-                    EditorUtility.DisplayProgressBar(title, message, progress);
-                    return false;
-                }
-            }
-            return false;
-        }
+			if (EditorApplication.timeSinceStartup - s_LastProgressBarTime > delay)
+			{
+				if (cancelable)
+				{
+					return EditorUtility.DisplayCancelableProgressBar(title, message, progress);
+				}
+				else
+				{
+					EditorUtility.DisplayProgressBar(title, message, progress);
+					return false;
+				}
+			}
+			return false;
+		}
 
-        /// <summary>
-        /// Clears the current progressbar
-        /// </summary>
-        public static void ClearProgressBar()
-        {
-            s_LastProgressBarTime = -1.0;
-            EditorUtility.ClearProgressBar();
-        }
+		/// <summary>
+		/// Clears the current progressbar
+		/// </summary>
+		public static void ClearProgressBar()
+		{
+			s_LastProgressBarTime = -1.0;
+			EditorUtility.ClearProgressBar();
+		}
 
-        #endregion
+		#endregion
 
-        #region Other GUI Utils
-        //Source: https://github.com/Unity-Technologies/VFXToolbox/blob/master/Editor/Utility/VFXToolboxGUIUtility.cs
-        public static void GUIRotatedLabel(Rect position, string label, float angle, GUIStyle style)
-        {
-            var matrix = GUI.matrix;
-            var rect = new Rect(position.x - 10f, position.y, position.width, position.height);
-            GUIUtility.RotateAroundPivot(angle, rect.center);
-            GUI.Label(rect, label, style);
-            GUI.matrix = matrix;
-        }
+		#region Other GUI Utils
+		//Source: https://github.com/Unity-Technologies/VFXToolbox/blob/master/Editor/Utility/VFXToolboxGUIUtility.cs
+		public static void GUIRotatedLabel(Rect position, string label, float angle, GUIStyle style)
+		{
+			var matrix = GUI.matrix;
+			var rect = new Rect(position.x - 10f, position.y, position.width, position.height);
+			GUIUtility.RotateAroundPivot(angle, rect.center);
+			GUI.Label(rect, label, style);
+			GUI.matrix = matrix;
+		}
 		#endregion
 
 		#region Draw Drag And Drop Area
