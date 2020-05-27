@@ -3,10 +3,10 @@ using UnityEngine;
 namespace Paalo.UnityMiscTools
 {
 	/// <summary>
-	/// A singleton which is NOT destroyed on scene load, ie. it will live until the application is turned off.
+	/// A singleton which is destroyed on scene load.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public abstract class SingletonPersistent<T> : SingletonBase where T : MonoBehaviour
+	public abstract class SingletonNonPersistent<T> : SingletonBase where T : MonoBehaviour
 	{
 		private static T _instance;
 		private static object _lock = new object();
@@ -50,12 +50,9 @@ namespace Paalo.UnityMiscTools
 
 					GameObject singleton = new GameObject();
 					_instance = singleton.AddComponent<T>();
-					singleton.name = $"_{typeof(T).ToString()} (Persistent Singleton)";
+					singleton.name = $"_{typeof(T).ToString()} (Non-Persistent Singleton)";
 
-					//Make persistent
-					DontDestroyOnLoad(singleton);
-
-					Debug.Log($"[Singleton] An instance of {typeof(T)} is needed in the scene, so a persistent '{singleton}' was created.");
+					Debug.Log($"[Singleton] An instance of {typeof(T)} is needed in the scene, so a non-persistent '{singleton}' was created.");
 
 					return _instance;
 				}
@@ -75,7 +72,6 @@ namespace Paalo.UnityMiscTools
 			{
 				Destroy(gameObject);
 			}
-			DontDestroyOnLoad(this.gameObject);
 		}
 	}
 }
