@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace OutHere
+namespace Paalo.UnityMiscTools
 {
 	public class SineWaveMovement : MonoBehaviour
 	{
