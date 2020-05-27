@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Paalo.UnityMiscTools
 {
 	/// <summary>
-	/// A singleton which is destroyed on scene load.
+	/// A singleton which is destroyed on scene load (ie. when unloading the scene where this GameObject resides).
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public abstract class SingletonNonPersistent<T> : SingletonBase where T : MonoBehaviour
