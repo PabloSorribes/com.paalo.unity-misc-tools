@@ -449,6 +449,7 @@ namespace Paalo.Utils
 
 		/// <summary>
 		/// Find all prefabs containing a specific component (T)
+		/// <para>Source: http://answers.unity.com/answers/734018/view.html </para>
 		/// </summary>
 		/// <typeparam name="T">The type of component</typeparam>
 		public static List<GameObject> LoadPrefabsContaining<T>(string path) where T : UnityEngine.Component
