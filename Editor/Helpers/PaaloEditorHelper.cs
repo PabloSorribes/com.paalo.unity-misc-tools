@@ -446,5 +446,28 @@ namespace Paalo.Utils
 			Object[] selectedAssets = Selection.GetFiltered(typeof(T), SelectionMode.Assets);
 			return selectedAssets;
 		}
+
+		/// <summary>
+		/// Find all prefabs containing a specific component (T)
+		/// </summary>
+		/// <typeparam name="T">The type of component</typeparam>
+		public static List<GameObject> LoadPrefabsContaining<T>(string path) where T : UnityEngine.Component
+		{
+			List<GameObject> result = new List<GameObject>();
+
+			var allFiles = Resources.LoadAll<UnityEngine.Object>(path);
+			foreach (var obj in allFiles)
+			{
+				if (obj is GameObject)
+				{
+					GameObject go = obj as GameObject;
+					if (go.GetComponent<T>() != null)
+					{
+						result.Add(go);
+					}
+				}
+			}
+			return result;
+		}
 	}
 }
