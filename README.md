@@ -6,7 +6,7 @@ Add the package to your project by adding this in your `manifest.json`-file, loc
 ```
 {
   "dependencies": {
-    "com.paalo.unity-misc-tools": "https://github.com/PabloSorribes/com.paalo.unity-misc-tools.git#0.3.0",
+    "com.paalo.unity-misc-tools": "https://github.com/PabloSorribes/com.paalo.unity-misc-tools.git#0.2.2",
     ...
   }
 }
