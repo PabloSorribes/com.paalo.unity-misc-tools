@@ -380,6 +380,24 @@ namespace Paalo.Utils
 		}
 		#endregion
 
+		/// <summary>
+		/// Loads all assets of a certain type defined by the <paramref name="pattern"/> (the extension of the asset).
+		/// </summary>
+		/// <param name="path">Path relative to the project, eg. "Assets/Game/Prefabs"</param>
+		/// <param name="pattern">*.prefab, *.scene, etc</param>
+		/// <returns></returns>
+		public static GameObject[] LoadAssetsFromPath(string path, string pattern)
+		{
+			var result = new List<GameObject>();
+			var info = new DirectoryInfo(path);
+			var fileInfo = info.GetFiles(pattern);
+
+			foreach (var file in fileInfo)
+				result.Add(AssetDatabase.LoadAssetAtPath<GameObject>($"{path}/{file.Name}"));
+
+			return result.ToArray();
+		}
+
 		public static T[] GetAllAssetsOfTypeInDirectory<T>(string path) where T : UnityEngine.Object
 		{
 			List<T> assetsToGet = new List<T>();
