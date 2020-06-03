@@ -3,12 +3,13 @@
 	public class CurrentPackageConstants
 	{
 		private const string paaloMenuPath = "Paalo/";
-		private const string currentPackageName = "Misc Tools" + "/";
+		private const string currentPackageName = "Misc Tools/";
+		private const string examplesPath = "Examples/";
 
 		/// <summary>
 		/// To make the menu be at the top of the GameObject-menu and the first option in the hierarchy.
 		/// </summary>
-		public const int packageMenuIndexPosition = -100; 
+		public const int packageMenuIndexPosition = -100;
 
 		/// <summary>
 		/// Add the toolName after this path eg:
@@ -24,22 +25,18 @@
 		/// </summary>
 		public const string packageWindowMenuPath = "Window/" + paaloMenuPath + currentPackageName; //+ toolName;
 
+		public const string packageExamplesMenuPath = "Window/" + paaloMenuPath + currentPackageName + examplesPath; //+ toolName;
+
 
 		//Example Implementation:
 		#region ToolName and SetupWindow
 		//private const string toolName = "Find Directory Of Script";
 
 		//[MenuItem(CurrentPackageConstants.packageRightClickMenuPath + toolName, false, CurrentPackageConstants.packageMenuIndexPosition)]
-		//public static void RightClickMenu()
-		//{
-		//	SetupWindow();
-		//}
+		//public static void RightClickMenu() => SetupWindow();
 
 		//[MenuItem(CurrentPackageConstants.packageWindowMenuPath + toolName, false, CurrentPackageConstants.packageMenuIndexPosition)]
-		//public static void ToolsMenu()
-		//{
-		//	SetupWindow();
-		//}
+		//public static void ToolsMenu() => SetupWindow();
 
 		//public static void SetupWindow()
 		//{
