@@ -1,4 +1,4 @@
-﻿namespace Paalo
+﻿namespace Paalo.UnityMiscTools
 {
 	public class CurrentPackageConstants
 	{
