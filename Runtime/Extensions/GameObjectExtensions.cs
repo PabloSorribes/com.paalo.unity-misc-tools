@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Paalo.Utils
+namespace Paalo.UnityMiscTools.Extensions
 {
     public static class GameObjectExtensions
     {
