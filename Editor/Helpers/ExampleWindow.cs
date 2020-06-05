@@ -1,8 +1,8 @@
-﻿using Paalo.Utils;
+﻿using Paalo.UnityMiscTools.EditorTools;
 using UnityEditor;
 using UnityEngine;
 
-namespace Paalo.Tools
+namespace Paalo.UnityMiscTools.Examples
 {
 	public class ExampleWindow : EditorWindow
 	{
