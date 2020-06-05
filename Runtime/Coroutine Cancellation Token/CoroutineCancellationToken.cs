@@ -1,4 +1,4 @@
-﻿namespace Paalo.UnityAudioTools
+﻿namespace Paalo.UnityMiscTools
 {
 	public class CoroutineCancellationToken
 	{
