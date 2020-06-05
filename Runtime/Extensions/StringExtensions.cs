@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Paalo.Utils
+namespace Paalo.UnityMiscTools.Extensions
 {
 	public static class StringExtensions
 	{
