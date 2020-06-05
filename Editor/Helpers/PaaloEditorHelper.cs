@@ -3,7 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace Paalo.Utils
+namespace Paalo.UnityMiscTools.EditorTools
 {
 	/// <summary>
 	/// Contains helper methods for common (and tedious) operations when writing IMGUI-code.

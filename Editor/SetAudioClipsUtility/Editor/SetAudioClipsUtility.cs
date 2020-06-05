@@ -1,10 +1,9 @@
-﻿using Paalo.Utils;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Paalo.Tools
+namespace Paalo.UnityMiscTools.EditorTools
 {
 	public class SetAudioClipsUtility : EditorWindow
 	{

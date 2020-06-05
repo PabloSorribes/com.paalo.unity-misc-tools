@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Paalo.Tools
+namespace Paalo.UnityMiscTools.EditorTools
 {
 	public class BulkRenameUtility : EditorWindow
 	{
