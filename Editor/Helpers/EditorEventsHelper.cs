@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Paalo.Utils
+namespace Paalo.UnityMiscTools.EditorTools
 {
 	public static class EditorEventsHelper
 	{
