@@ -15,5 +15,20 @@
 			float remappedValue = C + (x-A)/(B-A) * (D - C);
 			return remappedValue;
 		}
+
+		/// <summary>
+		/// Instead of using <see cref="UnityEngine.Mathf.Approximately(float, float)"/> for zero checking. 
+		/// This is a bit faster.
+		/// </summary>
+		/// <param name="valueToCheck"></param>
+		/// <returns></returns>
+		public static bool IsApproximatelyZero(float valueToCheck)
+		{
+			if (valueToCheck > float.Epsilon)
+			{
+				return false;
+			}
+			return true;
+		}
 	}
 }
