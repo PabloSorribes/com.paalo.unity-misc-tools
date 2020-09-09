@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class CreateNewScriptFromCustomTemplate
 {
-	private static string pathToYourScriptTemplate = "com.paalo.unity-misc-tools/Editor/Create Scripts from own Template/ScriptTemplates/PaaloScriptTemplate.cs.txt";
+	private static readonly string pathToYourScriptTemplate = "com.paalo.unity-misc-tools/Editor/Create Scripts from own Template/ScriptTemplates/PaaloScriptTemplate.cs.txt";
 
 	[MenuItem(itemName: "Assets/Create/Paalo/Create New Script from Custom Template", isValidateFunction: false, priority: 51)]
 	public static void CreateScriptFromTemplate()
@@ -19,20 +19,11 @@ public class CreateNewScriptFromCustomTemplate
 			"Cancel",
 			"Choose another file as template");
 
-		//Check if we're in the Package Development-project or in a project that is using this script as a Package.
-		Object scriptTemplateAsset = AssetDatabase.LoadAssetAtPath($"Packages/{pathToYourScriptTemplate}", typeof(Object));
-		if (scriptTemplateAsset == null)
-		{
-			scriptTemplateAsset = AssetDatabase.LoadAssetAtPath($"Assets/{pathToYourScriptTemplate}", typeof(Object));
-		}
-		pathToYourScriptTemplate = AssetDatabase.GetAssetPath(scriptTemplateAsset);
-
-
 		switch (dialogResult)
 		{
 			// Default template (ok)
 			case 0:
-				ProjectWindowUtil.CreateScriptAssetFromTemplateFile(pathToYourScriptTemplate, "PaaloBehaviour.cs");
+				CreateUsingDefaultScriptTemplate(pathToYourScriptTemplate);
 				break;
 
 			// Cancel.
@@ -41,13 +32,7 @@ public class CreateNewScriptFromCustomTemplate
 
 			// Choose another template (alternative)
 			case 2:
-				string templateAlternative = SelectScriptTemplateAsset();
-
-				if (string.IsNullOrEmpty(templateAlternative))
-				{
-					break;
-				}
-				ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templateAlternative, "PaaloBehaviour.cs");
+				CreateUsingAlternativeScriptTemplate();
 				break;
 
 			default:
@@ -55,6 +40,29 @@ public class CreateNewScriptFromCustomTemplate
 				break;
 		}
 	}
+
+	public static void CreateUsingDefaultScriptTemplate(string pathToYourScriptTemplate)
+	{
+		//Check if we're in the Package Development-project or in a project that is using this script as a Package.
+		Object scriptTemplateAsset = AssetDatabase.LoadAssetAtPath($"Packages/{pathToYourScriptTemplate}", typeof(Object));
+		if (scriptTemplateAsset == null)
+			scriptTemplateAsset = AssetDatabase.LoadAssetAtPath($"Assets/{pathToYourScriptTemplate}", typeof(Object));
+
+		pathToYourScriptTemplate = AssetDatabase.GetAssetPath(scriptTemplateAsset);
+		ProjectWindowUtil.CreateScriptAssetFromTemplateFile(pathToYourScriptTemplate, "PaaloBehaviour.cs");
+	}
+
+	public static void CreateUsingAlternativeScriptTemplate()
+	{
+		string templateAlternative = SelectScriptTemplateAsset();
+
+		//User cancelled the selection
+		if (string.IsNullOrEmpty(templateAlternative))
+			return;
+
+		ProjectWindowUtil.CreateScriptAssetFromTemplateFile(templateAlternative, "YourBehaviour.cs");
+	}
+
 
 	public static string SelectScriptTemplateAsset()
 	{
