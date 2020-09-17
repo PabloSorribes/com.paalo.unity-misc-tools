@@ -235,7 +235,18 @@ namespace Paalo.UnityMiscTools.EditorTools
 		/// </summary>
 		private static void HowToDrawDragAndDropArea()
 		{
-			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(new DragAndDropAreaInfo("Audio Clips"), OnDragAndDropPerformed_CallbackExample);
+			//Using a "proper" function to handle the Callback
+			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(
+				new DragAndDropAreaInfo("Audio Clips"), 
+				OnDragAndDropPerformed_CallbackExample);
+
+			//Using a Lambda Expression for the Callback
+			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(
+				new DragAndDropAreaInfo("Audio Clips"),
+				draggedObjects => 
+				{
+					Debug.Log($"Dragged Objects Length: {draggedObjects.Length}");
+				});
 		}
 
 		/// <summary>
