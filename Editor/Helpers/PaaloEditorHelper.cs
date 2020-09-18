@@ -392,6 +392,54 @@ namespace Paalo.UnityMiscTools.EditorTools
 		#endregion
 
 		/// <summary>
+		/// Draw a scrollable TextArea which displays all the elements of the array you send in as clickable and copy-pasteable text.
+		/// <para></para>
+		/// See '<see cref="Examples.DrawTextAreaExample.GUI_DrawTextAreaScroller"/>' on how to call this method.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="typeArray">An array of objects deriving from <see cref="UnityEngine.Object"/> that you want to display the elements of.</param>
+		public static void DrawTextAreaScroller<T>(T[] typeArray) where T : UnityEngine.Object
+		{
+			EditorGUILayout.BeginVertical(GUI.skin.box);
+
+			//Label for amount of Target DSGs
+			EditorGUILayout.LabelField($"Added '{typeof(T).Name}'-objects: {typeArray?.Length}", EditorStyles.boldLabel);
+
+			//Making a long string with a newline between each element.
+			string arrayObjectNamesString = string.Empty;
+			if (typeArray != null)
+			{
+				foreach (var typeObj in typeArray)
+				{
+					if (typeObj == null)
+						continue;
+
+					arrayObjectNamesString += $"{typeObj?.name}\n";
+				}
+				arrayObjectNamesString.TrimEnd(System.Environment.NewLine.ToCharArray());
+			}
+
+			//Only show TextArea if any elements have been added.
+			if (typeArray != null && typeArray.Length > 0)
+			{
+				//Initialize variables for displaying the Scrollable TextArea
+				string textAreaString = "";
+				Vector2 textAreaScroller = Vector2.zero;
+
+				//Calculate the size of the text area by adding one lineHeight per element 
+				textAreaScroller = EditorGUILayout.BeginScrollView(textAreaScroller);
+				float textAreaSingleLineHeight = EditorGUIUtility.singleLineHeight - 1f;
+				float textAreaHeight = textAreaSingleLineHeight * typeArray.Length;
+
+				//Make text area that shows what items the array contains.
+				textAreaString = EditorGUILayout.TextArea(arrayObjectNamesString, GUILayout.Height(textAreaHeight));
+				EditorGUILayout.EndScrollView();
+			}
+
+			EditorGUILayout.EndVertical();
+		}
+
+		/// <summary>
 		/// Loads all assets of a certain type defined by the <paramref name="pattern"/> (the extension of the asset).
 		/// </summary>
 		/// <param name="path">Path relative to the project, eg. "Assets/Game/Prefabs"</param>
