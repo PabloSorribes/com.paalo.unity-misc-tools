@@ -230,52 +230,18 @@ namespace Paalo.UnityMiscTools.EditorTools
 
 		#region Draw Drag And Drop Area
 
-		/// <summary>
-		/// Example method on how to call the '<see cref="DrawDragAndDropArea{T}(DragAndDropAreaInfo, System.Action{T[]})"/>' from OnGUI()
-		/// </summary>
-		private static void HowToDrawDragAndDropArea()
-		{
-			//Using a "proper" function to handle the Callback
-			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(
-				new DragAndDropAreaInfo("Audio Clips"), 
-				OnDragAndDropPerformed_CallbackExample);
-
-			//Using a Lambda Expression for the Callback
-			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(
-				new DragAndDropAreaInfo("Audio Clips"),
-				draggedObjects => 
-				{
-					Debug.Log($"Dragged Objects Length: {draggedObjects.Length}");
-				});
-		}
-
-		/// <summary>
-		/// Example method on how to handle the objects that are received through the OnPerformedDragCallback in the '<see cref="DrawDragAndDropArea{T}(DragAndDropAreaInfo, System.Action{T[]})"/>'-method.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="draggedObjects"></param>
-		private static void OnDragAndDropPerformed_CallbackExample<T>(T[] draggedObjects) where T : UnityEngine.Object
-		{
-			var myObjects = draggedObjects as AudioClip[];
-
-			Debug.Log("Dragged Object Array Length: " + myObjects.Length);
-			Debug.Log($"Dragged Obj Array Type: {draggedObjects.GetType().FullName}");
-			foreach (var draggedObj in draggedObjects)
-			{
-				Debug.Log($"Dragged Obj Type: {draggedObj.GetType().FullName}");
-			}
-		}
+		
 
 		/// <summary>
 		/// Draws a Drag and Drop Area and allows you to send in a method which receives an array of the objects that were dragged into the area.
 		/// <para></para>
-		/// The caller method needs to receive a generic type "T" and then cast it to its desired type itself.
+		/// The caller method needs to receive a generic type "T" and then cast it to its desired type itself OR use a Lambda Expression for handling the OnDragged-event.
 		/// <para></para>
-		/// Example implementation in OnGUI: <see cref="OnDragAndDropPerformed_CallbackExample{T}(T[])"/>
+		/// Example implementation in OnGUI: '<see cref="Paalo.UnityMiscTools.Examples.DragAndDropAreaExample"/>'
 		/// </summary>
 		/// <seealso cref="HowToDrawDragAndDropArea"/>
 		/// <typeparam name="T">The object type you want the '<paramref name="OnPerformedDragCallback"/>'-method to handle.</typeparam>
-		/// <param name="dragAreaInfo"></param>
+		/// <param name="dragAreaInfo">How the DragArea should look like and what text it should display.</param>
 		/// <returns></returns>
 		public static void DrawDragAndDropArea<T>(DragAndDropAreaInfo dragAreaInfo, System.Action<T[]> OnPerformedDragCallback = null) where T : UnityEngine.Object
 		{
@@ -357,38 +323,7 @@ namespace Paalo.UnityMiscTools.EditorTools
 			return draggedTypeObjects.ToArray();
 		}
 
-		/// <summary>
-		/// Use this class to create some values for the DragAndDrop-area that you want to create.
-		/// </summary>
-		public class DragAndDropAreaInfo
-		{
-			public string DragAreaText
-			{
-				get => $"Drag {draggedObjectTypeName} or a folder containing some {draggedObjectTypeName} here!";
-				//private set => DragAreaText = value;
-			}
-
-			public string draggedObjectTypeName = "AudioClips";
-			public float dragAreaWidth = 0f;
-			public float dragAreaHeight = 35f;
-
-			public Color outlineColor = Color.black;
-			public Color backgroundColor = Color.yellow;
-
-			public DragAndDropAreaInfo(string draggedObjectTypeName)
-			{
-				this.draggedObjectTypeName = draggedObjectTypeName;
-			}
-
-			public DragAndDropAreaInfo(string draggedObjectTypeName, Color outlineColor, Color backgroundColor, float dragAreaWidth = 0f, float dragAreaHeight = 35f)
-			{
-				this.draggedObjectTypeName = draggedObjectTypeName;
-				this.outlineColor = outlineColor;
-				this.backgroundColor = backgroundColor;
-				this.dragAreaWidth = dragAreaWidth;
-				this.dragAreaHeight = dragAreaHeight;
-			}
-		}
+		
 		#endregion
 
 		/// <summary>

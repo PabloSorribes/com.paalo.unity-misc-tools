@@ -56,7 +56,7 @@ namespace Paalo.UnityMiscTools.EditorTools
 			EditorGUILayout.BeginVertical(GUI.skin.box);
 
 			EditorGUILayout.Space();
-			var dragAndDropInfo = new PaaloEditorHelper.DragAndDropAreaInfo("Audio Clips", Color.black, Color.cyan);
+			var dragAndDropInfo = new DragAndDropAreaInfo("Audio Clips", Color.black, Color.cyan);
 			PaaloEditorHelper.DrawDragAndDropArea<AudioClip>(dragAndDropInfo, UpdateAudioClipsOnDragAndDrop);
 			EditorGUILayout.Space();
 
