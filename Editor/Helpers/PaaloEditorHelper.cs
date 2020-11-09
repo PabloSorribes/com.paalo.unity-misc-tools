@@ -230,8 +230,6 @@ namespace Paalo.UnityMiscTools.EditorTools
 
 		#region Draw Drag And Drop Area
 
-		
-
 		/// <summary>
 		/// Draws a Drag and Drop Area and allows you to send in a method which receives an array of the objects that were dragged into the area.
 		/// <para></para>
@@ -323,8 +321,12 @@ namespace Paalo.UnityMiscTools.EditorTools
 			return draggedTypeObjects.ToArray();
 		}
 
-		
-		#endregion
+		#endregion Draw Drag And Drop Area
+
+		public static void DrawHeader(string headerText, params GUILayoutOption[] layoutOptions)
+		{
+			EditorGUILayout.LabelField(headerText, EditorStyles.boldLabel, layoutOptions);
+		}
 
 		/// <summary>
 		/// Draw a scrollable TextArea which displays all the elements of the array you send in as clickable and copy-pasteable text.
